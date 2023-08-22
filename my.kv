@@ -1,0 +1,456 @@
+#:kivy 1.11.1
+
+<WelcomeScreen>:
+    RelativeLayout:
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                #source: 'textures/background1.jpg'
+
+        Label:
+            text: 'Welcome to the Wallpaper App!'
+            font_size: 40
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1 # Black color
+            size_hint_y: None
+            height: self.texture_size[1] + 10  # Adjust for padding
+            pos_hint: {'center_x': 0.5, 'top': 0.6}
+
+        Button:
+            text: 'Start Wallpaper Shenanigans'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.manager.current = 'wallpaper'
+            on_release: root.manager.transition.direction = 'left'
+            size_hint: None, None
+            size: 250, 60
+            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+    
+
+        # exit app button
+        Button:
+            text: 'Exit App'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.exit_app()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+ 
+<WallpaperScreen>:
+    RelativeLayout:
+
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White color
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: 'Choose an Option'
+            font_size: 40
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: self.texture_size[1] + 10  # Adjust for padding
+            pos_hint: {'center_x': 0.5, 'top': 0.85}
+
+        Button:
+            text: 'Daily Random Wallpapers'
+            font_size: 20
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.manager.current = 'random'
+            on_release: root.manager.transition.direction = 'left'
+            size_hint: None, None
+            size: 300, 60
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+        Button:
+            text: 'Your Calendar Wallpapers'
+            font_size: 20
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.manager.current = 'viewimages'
+            on_release: root.manager.transition.direction = 'left'
+            size_hint: None, None
+            size: 300, 60
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+        Button:
+            text: 'Your Saved Wallpapers'
+            font_size: 20
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.manager.current = 'saved'
+            on_release: root.manager.transition.direction = 'left'
+            size_hint: None, None
+            size: 300, 60
+            pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+
+        Button:
+            text: 'Schedule Wallpaper Changes'
+            font_size: 20
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.manager.current = 'instructions'
+            on_release: root.manager.transition.direction = 'left'
+            size_hint: None, None
+            size: 300, 60
+            pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+
+        Button:
+            text: 'Home'
+            font_name: 'MyFont'
+            font_size: 20
+            bold: True
+            on_release: root.manager.current = 'welcome'
+            on_release: root.manager.transition.direction = 'right'
+            size_hint: None, None
+            size: 300, 60
+            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+
+<ViewImagesScreen>:
+    image: image
+    image_label: image_label
+
+    RelativeLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White color
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Label:
+            text: 'Select Wallpaper'
+            font_size: 28
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: self.texture_size[1] + 10  # Adjust for padding
+            pos_hint: {'center_x': 0.5, 'top': 0.99}
+
+        Image:
+            id: image
+            allow_stretch: True
+            keep_ratio: True
+            size_hint: None, None
+            size: 800, 800
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+        Label:
+            id: image_label
+            text: ''
+            font_size: 26
+            font_name: 'MyFont'
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            pos_hint: {'center_x': 0.5, 'top': 0.3}
+
+        Button:
+            text: 'Previous'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.previous_image()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.2, 'center_y': 0.2}
+
+        Button:
+            text: 'Next'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.next_image()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.8, 'center_y': 0.2}
+
+        Button:
+            text: 'Set Wallpaper'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.set_wallpaper()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.4, 'center_y': 0.2}
+
+        Button:
+            text: 'Delete'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.delete_wallpaper()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.6, 'center_y': 0.2}
+
+        Button:
+            text: 'Back'
+            font_name: 'MyFont'
+            bold: True
+            on_release:
+                root.manager.current = 'wallpaper'
+                root.manager.transition.direction = 'right'
+            size_hint: None, None
+            size: 180, 40
+            pos_hint: {'center_x': 0.5, 'center_y': 0.05}
+
+
+<RandomWallpaperScreen>:
+    image: image
+
+    RelativeLayout:
+
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White color
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: 'Random Wallpapers'
+            font_size: 28
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+            # put at top
+            size_hint_y: None
+            height: self.texture_size[1] + 10  # Adjust for padding
+            pos_hint: {'center_x': 0.5, 'top': 0.99}
+
+        Image:
+            id: image
+            allow_stretch: True
+            keep_ratio: True
+            size_hint: None, None
+            size: 800, 800  # Adjust these values to make the image larger
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+        Button:
+            text: 'Previous'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.download_random_wallpaper(next=False)
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.2, 'center_y': 0.2}
+        Button:
+            text: 'Next'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.download_random_wallpaper(next=True)
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.8, 'center_y': 0.2}
+
+        Button:
+            text: 'Set Wallpaper'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.set_wallpaper()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.4, 'center_y': 0.2}
+
+        Button:
+            text: 'Save'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.save_wallpaper()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.6, 'center_y': 0.2}
+
+        Button:
+            text: 'Back'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.manager.current = 'wallpaper'
+            on_release: root.manager.transition.direction = 'right'
+            size_hint: None, None
+            size: 180, 40
+            pos_hint: {'center_x': 0.5, 'center_y': 0.05}
+
+<SavedWallpaperScreen>:
+    image: image
+    image_label: image_label
+
+    RelativeLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White color
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Label:
+            text: 'Select Wallpaper'
+            font_size: 28
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: self.texture_size[1] + 10  # Adjust for padding
+            pos_hint: {'center_x': 0.5, 'top': 0.99}
+
+        Image:
+            id: image
+            allow_stretch: True
+            keep_ratio: True
+            size_hint: None, None
+            size: 800, 800
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+        Label:
+            id: image_label
+            text: ''
+            font_size: 26
+            font_name: 'MyFont'
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: self.texture_size[1] + 10
+            pos_hint: {'center_x': 0.5, 'top': 0.3}
+
+        Button:
+            text: 'Previous'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.previous_image()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.2, 'center_y': 0.2}
+
+        Button:
+            text: 'Next'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.next_image()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.8, 'center_y': 0.2}
+
+        Button:
+            text: 'Set Wallpaper'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.set_wallpaper()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.4, 'center_y': 0.2}
+
+        Button:
+            text: 'Delete'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.delete_wallpaper()
+            size_hint: None, None
+            size: 150, 40
+            pos_hint: {'center_x': 0.6, 'center_y': 0.2}
+
+        Button:
+            text: 'Back'
+            font_name: 'MyFont'
+            bold: True
+            on_release:
+                root.manager.current = 'wallpaper'
+                root.manager.transition.direction = 'right'
+            size_hint: None, None
+            size: 180, 40
+            pos_hint: {'center_x': 0.5, 'center_y': 0.05}
+
+<InstructionScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White color
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: 'Instructions for Setting Up Task Scheduler'
+            font_size: 24
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: '1. Press Win + R to open the Run dialog.'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: '2. Type "taskschd.msc" and press Enter to open the Task Scheduler.'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: '3. In the Task Scheduler, click on "Create Basic Task" on the right-hand side.'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: '4. Follow the wizard to set up the task:'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: '   - Give your task a name and description.'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: '   - Select "When I log on" as the trigger. \nThis way the wallpaper will change every time you log in and it has been a new day'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: f'   - Choose "Start a program" as the action.'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: f'   - Browse for the wpchanger.py script. Use the following path: \n{root.path}'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Label:
+            text: '5. Complete the wizard and the task will be created.'
+            font_size: 18
+            font_name: 'MyFont'
+            bold: True
+            color: 0, 0, 0, 1
+
+        Button:
+            text: 'Back'
+            font_name: 'MyFont'
+            bold: True
+            on_release: root.manager.current = 'wallpaper'
+            on_release: root.manager.transition.direction = 'right'
+            size_hint: None, None
+            size: 180, 40
+            pos_hint: {'center_x': 0.5}
