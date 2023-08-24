@@ -18,11 +18,28 @@ def main():
         downloadImage(pictureUrl, path, ddmmyy)
         set_wallpaper(path + "wallpaperOfTheDay " + ddmmyy + ".jpg")
     else:
-        print("Already downloaded")
+        return
     
 
 def __getImage(): # This function returns the link to the top wallpaper of the day
-    redditObject = praw.Reddit(client_id = "T46sr4defGPqYMYBntnRUA", client_secret = "H8Snte7389b2Jee8mtJZi_usK52X4g",  user_agent = 'Daily Wallpaper Retriver for a new Windows Wallpaper')
+    redditObject = praw.Reddit(
+        client_id = "T46sr4defGPqYMYBntnRUA", 
+        client_secret = "H8Snte7389b2Jee8mtJZi_usK52X4g",  
+        user_agent = 'Daily Wallpaper Retriver for a new Windows Wallpaper',
+        check_for_updates=False,
+        comment_kind="t1",
+        message_kind="t4",
+        redditor_kind="t2",
+        submission_kind="t3",
+        subreddit_kind="t5",
+        trophy_kind="t6",
+        oauth_url="https://oauth.reddit.com",
+        reddit_url="https://www.reddit.com",
+        short_url="https://redd.it",
+        ratelimit_seconds=5,
+        timeout=16,
+    )
+    
 
     # Get the subreddit
     subreddit = redditObject.get('r/wallpaper')
@@ -33,7 +50,23 @@ def __getImage(): # This function returns the link to the top wallpaper of the d
             return url
             
 def __getImageRandom(): # This function returns the link to a random wallpaper
-    redditObject = praw.Reddit(client_id="T46sr4defGPqYMYBntnRUA", client_secret="H8Snte7389b2Jee8mtJZi_usK52X4g", user_agent='Daily Wallpaper Retriver for a new Windows Wallpaper')
+    redditObject = praw.Reddit(
+        client_id = "T46sr4defGPqYMYBntnRUA", 
+        client_secret = "H8Snte7389b2Jee8mtJZi_usK52X4g",  
+        user_agent = 'Daily Wallpaper Retriver for a new Windows Wallpaper',
+        check_for_updates=False,
+        comment_kind="t1",
+        message_kind="t4",
+        redditor_kind="t2",
+        submission_kind="t3",
+        subreddit_kind="t5",
+        trophy_kind="t6",
+        oauth_url="https://oauth.reddit.com",
+        reddit_url="https://www.reddit.com",
+        short_url="https://redd.it",
+        ratelimit_seconds=5,
+        timeout=16,
+    )
 
     # Get the subreddit
     subreddit = redditObject.get('r/wallpaper')
@@ -44,21 +77,39 @@ def __getImageRandom(): # This function returns the link to a random wallpaper
     random_post = posts[random_post_number]
     
     url = random_post.url
-    if url.endswith("jpg"):
+    if url.endswith("jpg") or url.endswith("jpeg") or url.endswith("png"):
         print(url)
         return url
     else:
         return __getImageRandom()
     
 def getRandomWallpapers(arr): # This function returns a list of random wallpapers
-    redditObject = praw.Reddit(client_id="T46sr4defGPqYMYBntnRUA", client_secret="H8Snte7389b2Jee8mtJZi_usK52X4g", user_agent='Daily Wallpaper Retriver for a new Windows Wallpaper')
+    redditObject = praw.Reddit(
+        client_id = "T46sr4defGPqYMYBntnRUA", 
+        client_secret = "H8Snte7389b2Jee8mtJZi_usK52X4g",  
+        user_agent = 'Daily Wallpaper Retriver for a new Windows Wallpaper',
+        check_for_updates=False,
+        comment_kind="t1",
+        message_kind="t4",
+        redditor_kind="t2",
+        submission_kind="t3",
+        subreddit_kind="t5",
+        trophy_kind="t6",
+        oauth_url="https://oauth.reddit.com",
+        reddit_url="https://www.reddit.com",
+        short_url="https://redd.it",
+        ratelimit_seconds=5,
+        timeout=16,
+    )
 
     # Get the subreddit
     subreddit = redditObject.get('r/wallpaper')
     for post in subreddit:
         url = str(post.url)
-        if url.endswith("jpg"):
+        if url.endswith("jpg") or url.endswith("jpeg") or url.endswith("png"):
             arr.append(url)
+    print (len(subreddit))
+    print (len(arr))
     return arr
 
 

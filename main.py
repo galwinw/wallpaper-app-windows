@@ -12,22 +12,30 @@ import shutil
 from datetime import datetime
 import sys
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 class WelcomeScreen(Screen):
     def exit_app(self):
         App.get_running_app().stop()
         # if any random wallpapers are downloaded, delete them
-        path = os.path.dirname(os.path.abspath(__file__))
-        print('######################' + path)
-        for file in os.listdir(path):
+        for file in os.listdir(resource_path('')):
             if file.startswith('randomWallpaper') and file.endswith('.jpg'):
-                os.remove(os.path.join(path, file))
+                os.remove(resource_path(file))
 
 class WallpaperScreen(Screen):
     pass
 
 class RandomWallpaperScreen(Screen):
     image = ObjectProperty(None)
-    path = os.path.dirname(os.path.abspath(__file__))
+    path = resource_path('')
     randomWallpapers = []
     image_index = 0
     with open(os.path.join(path, 'Saved\savedIndex.txt'), 'r') as f:
@@ -43,8 +51,6 @@ class RandomWallpaperScreen(Screen):
         self.randomWallpapers = wallpaper_changer.get_random_wallpapers(self.randomWallpapers)
 
     def download_random_wallpaper(self, next):
-        if self.image_index == 26:
-            self.image_index = 0
 
         wallpaper_changer = WallpaperChanger()
         wallpaper_path = os.path.join(self.path, self.current_image_source)
@@ -63,14 +69,14 @@ class RandomWallpaperScreen(Screen):
         self.update_image(wallpaper_path)
         
     def update_image(self, wallpaper_path):
-        print ("Setting image: " + wallpaper_path + " as wallpaper")
+        print ("Setting image: " + wallpaper_path + " as wallpaper" + "Image index: " + str(self.image_index))
         if os.path.exists(wallpaper_path):
             self.image.source = wallpaper_path  # Set the image source again
             print ("Image set as wallpaper")
 
     def set_wallpaper(self):
         wallpaper_changer = WallpaperChanger()
-        wallpaper_changer.set_wallpaper(os.path.join(os.path.dirname(os.path.abspath(__file__)), self.current_image_source))
+        wallpaper_changer.set_wallpaper(os.path.join(self.path, self.current_image_source))
         wallpaper_set()
 
     def save_wallpaper(self):
@@ -79,8 +85,6 @@ class RandomWallpaperScreen(Screen):
         if not os.path.exists(saved_folder):
             os.makedirs(saved_folder)
 
-        # Get the source filename
-        source_filename = os.path.basename(self.current_image_source)
         
         # Construct the destination filename
         destination_filename = f"savedWallpaper{self.saved_index}.jpg"
@@ -88,8 +92,8 @@ class RandomWallpaperScreen(Screen):
 
         try:
             # Copy the file to the 'saved' folder with the new name
-            shutil.copyfile(self.current_image_source, destination_path)
-            print(f"Image '{source_filename}' saved as '{destination_filename}' in 'saved' folder.")
+            shutil.copyfile(os.path.join(self.path, self.current_image_source), destination_path)
+            print(f"Image '{self.current_image_source}' saved as '{destination_filename}' in 'saved' folder.")
             wallpaper_saved()
             self.saved_index += 1
             update_saved_index(self.saved_index)
@@ -101,7 +105,7 @@ class ViewImagesScreen(Screen):
     image_label = ObjectProperty(None)
     
     image_index = 0
-    path = os.path.dirname(os.path.abspath(__file__)) + "/wp-images/"
+    path = resource_path("wp-images")
     image_files = [file for file in os.listdir(path) if file.startswith('wallpaperOfTheDay') and file.endswith('.jpg')]
     
     
@@ -113,7 +117,7 @@ class ViewImagesScreen(Screen):
     def update_folder(self):
         self.image_files = [file for file in os.listdir(self.path) if file.startswith('wallpaperOfTheDay') and file.endswith('.jpg')]
         if not self.image_files:
-            self.image_label.text = "No images in folder"
+            self.image_label.text = "No Calendar Images, Set up "'Schedule Wallpaper Changes" to view Images'
             self.image.source = ""
         # Sort the image files by date
         self.image_files = sorted(self.image_files, key=lambda filename: self.extract_date(filename), reverse=True)
@@ -147,6 +151,8 @@ class ViewImagesScreen(Screen):
 
     def set_wallpaper(self):
         wallpaper_changer = WallpaperChanger()
+        if len(self.image_files) == 0:
+            return
         image_file = self.image_files[self.image_index]
         wallpaper_changer.set_wallpaper(os.path.join(self.path, image_file))
         wallpaper_set()
@@ -157,7 +163,10 @@ class ViewImagesScreen(Screen):
             image_path = os.path.join(self.path, image_file)
             os.remove(image_path)
             self.image_files.remove(image_file)
-            self.image_index = (self.image_index - 1) % len(self.image_files)
+            if len(self.image_files) == 0:
+                self.image_index = 0
+            else:
+                self.image_index = (self.image_index - 1) % len(self.image_files)
             wallpaper_deleted()
             self.update_image()
 
@@ -167,7 +176,7 @@ class SavedWallpaperScreen(Screen):
     
     image_index = 0
 
-    path = os.path.dirname(os.path.abspath(__file__)) + "/Saved/"
+    path = resource_path("Saved/")
     image_files = [file for file in os.listdir(path) if file.startswith('savedWallpaper') and file.endswith('.jpg')]
 
     def on_pre_enter(self):
@@ -176,7 +185,7 @@ class SavedWallpaperScreen(Screen):
 
     def update_folder(self):
         self.image_files = [file for file in os.listdir(self.path) if file.startswith('savedWallpaper') and file.endswith('.jpg')]
-        if not self.image_files:
+        if not self.image_files or len(self.image_files) == 0:
             self.image_label.text = "No saved wallpapers"
             self.image.source = ""
 
@@ -200,6 +209,8 @@ class SavedWallpaperScreen(Screen):
 
     def set_wallpaper(self):
         wallpaper_changer = WallpaperChanger()
+        if len(self.image_files) == 0:
+            return
         image_file = self.image_files[self.image_index]
         wallpaper_changer.set_wallpaper(os.path.join(self.path, image_file))
         wallpaper_set()
@@ -210,7 +221,10 @@ class SavedWallpaperScreen(Screen):
             image_path = os.path.join(self.path, image_file)
             os.remove(image_path)
             self.image_files.remove(image_file)
-            self.image_index = (self.image_index - 1) % len(self.image_files)
+            if (len(self.image_files) == 0):
+                self.image_index = 0
+            else:
+                self.image_index = (self.image_index - 1) % len(self.image_files)
             wallpaper_deleted()
             self.update_image()
 
@@ -219,10 +233,10 @@ class WindowManager(ScreenManager):
 
 class InstructionScreen(Screen):
     #path to wpchanger.py
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wpchanger.py')
+    path = resource_path('wpchanger.py')
 
 def update_saved_index(index):
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Saved\savedIndex.txt'), 'w') as f:
+    with open(resource_path('Save/savedIndex.txt'), 'w') as f:
         print("done")
         f.write(str(index))
 
@@ -238,15 +252,7 @@ def wallpaper_deleted():
     pop = Popup(title='Wallpaper Deleted', content=Label(text='Wallpaper deleted Succesfully'), size_hint=(None, None), size=(400, 400))
     pop.open()
 
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        base_path = sys._MEIPASS
 
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 kv = Builder.load_file("my.kv")
 sm = WindowManager()

@@ -383,14 +383,14 @@
             color: 0, 0, 0, 1
 
         Label:
-            text: '1. Press Win + R to open the Run dialog.'
+            text: '1. Open up the Task Scheduler on Windows.'
             font_size: 18
             font_name: 'MyFont'
             bold: True
             color: 0, 0, 0, 1
 
         Label:
-            text: '2. Type "taskschd.msc" and press Enter to open the Task Scheduler.'
+            text: '2. Once in the Task Scheduler, click on "Create Basic Task".'
             font_size: 18
             font_name: 'MyFont'
             bold: True
@@ -404,42 +404,42 @@
             color: 0, 0, 0, 1
 
         Label:
-            text: '4. Follow the wizard to set up the task:'
+            text: '4. Give your task a name (ex: Daily Wallpaper Change)  Give Your task a description (ex: Changes wallpaper if it has been a new day).'
             font_size: 18
             font_name: 'MyFont'
             bold: True
             color: 0, 0, 0, 1
 
         Label:
-            text: '   - Give your task a name and description.'
+            text: '5. Click "When I log on" as the trigger, The script will check if it has been a full day and only change the wallpaper if so. \n     Choosing a Daily trigger has prooven to be buggy and only will work if your computer is on at the time you set.'
             font_size: 18
             font_name: 'MyFont'
             bold: True
             color: 0, 0, 0, 1
 
         Label:
-            text: '   - Select "When I log on" as the trigger. \nThis way the wallpaper will change every time you log in and it has been a new day'
+            text: '6. Select "When I log on" as the trigger. This way the wallpaper will change every time you log in and it has been a new day.'
             font_size: 18
             font_name: 'MyFont'
             bold: True
             color: 0, 0, 0, 1
 
         Label:
-            text: f'   - Choose "Start a program" as the action.'
+            text: f'7. Choose "Start a program" as the action.'
             font_size: 18
             font_name: 'MyFont'
             bold: True
             color: 0, 0, 0, 1
 
         Label:
-            text: f'   - Browse for the wpchanger.py script. Use the following path: \n{root.path}'
+            text: f'8. Browse for the "wpchanger.py" script which is in the same directory as this application. Try using this path: \n                "{root.path}", \n                     if not navigate to where you have this application stored and it should be there.'
             font_size: 18
             font_name: 'MyFont'
             bold: True
             color: 0, 0, 0, 1
 
         Label:
-            text: '5. Complete the wizard and the task will be created.'
+            text: '9. Continue to Finish and the task will be created, and your wallpaper will be changed when you log on to your computer on a new day!'
             font_size: 18
             font_name: 'MyFont'
             bold: True
