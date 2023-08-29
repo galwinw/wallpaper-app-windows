@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import kivy
 from kivy.app import App
 from kivy.lang import Builder
@@ -14,13 +15,9 @@ import sys
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        base_path = sys._MEIPASS
-
-    except Exception:
-        base_path = os.path.abspath(".")
-
+    base_path = os.path.dirname(sys.executable)
     return os.path.join(base_path, relative_path)
+    
 
 class WelcomeScreen(Screen):
     def exit_app(self):
@@ -105,7 +102,7 @@ class ViewImagesScreen(Screen):
     image_label = ObjectProperty(None)
     
     image_index = 0
-    path = resource_path("wp-images")
+    path = resource_path("wp-images/")
     image_files = [file for file in os.listdir(path) if file.startswith('wallpaperOfTheDay') and file.endswith('.jpg')]
     
     
@@ -236,7 +233,7 @@ class InstructionScreen(Screen):
     path = resource_path('wpchanger.py')
 
 def update_saved_index(index):
-    with open(resource_path('Save/savedIndex.txt'), 'w') as f:
+    with open(resource_path('Saved/savedIndex.txt'), 'w') as f:
         print("done")
         f.write(str(index))
 
