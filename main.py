@@ -29,7 +29,7 @@ class WelcomeScreen(Screen):
                 os.remove(resource_path(file))
 
 class WallpaperScreen(Screen):
-    pass
+    pass   
 
 class RandomWallpaperScreen(Screen):
     image = ObjectProperty(None)
